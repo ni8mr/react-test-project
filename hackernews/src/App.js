@@ -31,7 +31,10 @@ class App extends Component {
         list,
       };
       // Binding onDismiss() method in the constructor
+      // Binding is necessary because (in JavaScript) class methods don't automatically bind 'this' to the class instance
       this.onDismiss = this.onDismiss.bind(this);
+      // Binding can be done automatically using arrow functions when declaring methods but officially ReAct sticks
+      // with class method bindings
   }
 
   onDismiss (id) {
@@ -59,7 +62,9 @@ class App extends Component {
                 <span>
                     <button
                         type='button'
-                        onClick={() => this.onDismiss(item.objectID)}
+                        onClick={() => this.onDismiss(item.objectID)} // It has to be a function
+                        // Otherwise the class method would be executed immediately when application is opened at
+                        // the browser
                     >
                         Dismiss
                     </button>
