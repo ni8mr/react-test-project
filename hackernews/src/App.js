@@ -25,6 +25,7 @@ const list = [
 class App extends Component {
   constructor (props) {
       // Without following we wouldn't be able to access this.props (if needed)
+      // According to the ReAct official doc: Class components should always call the base constructor with props.
       super(props);
       this.state = {
         list,
@@ -36,7 +37,12 @@ class App extends Component {
   onDismiss (id) {
       const isNotId = item => item.objectID !== id;
       const updatedList =  this.state.list.filter(isNotId);
+      // Setting a state directly won't re-render a component
+      // Thus we need to use setState()
       this.setState({ list: updatedList });
+      // this.props and this.state may be updated asynchronously
+      // Thus, we should not rely on their values for calculating the next state
+      // A way around can be accepting a function instead of an object at setState()
   }
 
   render() {
