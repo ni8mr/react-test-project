@@ -23,17 +23,50 @@ const list = [
 ];
 
 class App extends Component {
+  constructor (props) {
+      // Without following we wouldn't be able to access this.props (if needed)
+      super(props);
+      this.state = {
+        list,
+      };
+      // Binding onDismiss() method in the constructor
+      this.onDismiss = this.onDismiss.bind(this);
+  }
+
+  onDismiss (id) {
+      const isNotId = item => item.objectID !== id;
+      const updatedList =  this.state.list.filter(isNotId);
+      this.setState({ list: updatedList });
+  }
+
   render() {
     return (
       <div className="App">
-          {list.map(item => <div>{ item.title }</div>)}
+          {this.state.list.map(item =>
+              <div> key={item.objectID}
+                <span>
+                    <a href={item.url}>{item.title}</a>
+                </span>
+                <span>{item.author}</span>
+                <span>{item.num_comments}</span>
+                <span>{item.points}</span>
+                <span>
+                    <button
+                        type='button'
+                        onClick={() => this.onDismiss(item.objectID)}
+                    >
+                        Dismiss
+                    </button>
+                </span>
+              </div>
+          )}
       </div>
     );
   }
 }
 
-if (module.hot) {
-    module.hot.accept();
-}
+// if (module.hot) {
+//     module.hot.accept();
+// }
 
 export default App;
