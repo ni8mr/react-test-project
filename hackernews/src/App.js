@@ -22,6 +22,8 @@ const list = [
     },
 ];
 
+const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
+
 class App extends Component {
   constructor (props) {
       // Without following we wouldn't be able to access this.props (if needed)
@@ -29,12 +31,18 @@ class App extends Component {
       super(props);
       this.state = {
         list,
+        searchTerm: ''
       };
-      // Binding onDismiss() method in the constructor
+      // Binding methods in the constructor
       // Binding is necessary because (in JavaScript) class methods don't automatically bind 'this' to the class instance
+      this.onSearchChange = this.onSearchChange.bind(this);
       this.onDismiss = this.onDismiss.bind(this);
       // Binding can be done automatically using arrow functions when declaring methods but officially ReAct sticks
       // with class method bindings
+  }
+
+  onSearchChange (event) {
+      this.setState({ searchTerm: event.target.value });
   }
 
   onDismiss (id) {
@@ -51,7 +59,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-          {this.state.list.map(item =>
+          <form>
+              <input
+                  type="text"
+                  onChange={this.onSearchChange}
+              />
+          </form>
+          {this.state.list.filter(isSearched(this.state.searchTerm)).map(item =>
               <div> key={item.objectID}
                 <span>
                     <a href={item.url}>{item.title}</a>
